@@ -1,7 +1,10 @@
+using hotel_bellas_olas_api.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddDbContext<BellasOlasHotelDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DB_Connection")));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
