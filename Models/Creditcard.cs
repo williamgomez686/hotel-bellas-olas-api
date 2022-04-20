@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace hotel_bellas_olas_api.Models
 {
-    public partial class TbCreditCard
+    public partial class Creditcard
     {
-        public TbCreditCard()
+        public Creditcard()
         {
-            TbCreditCardUsers = new HashSet<TbCreditCardUser>();
+            Creditcardusers = new HashSet<Creditcarduser>();
         }
 
         public int CreditCardId { get; set; }
@@ -16,6 +16,6 @@ namespace hotel_bellas_olas_api.Models
         public string CardDate { get; set; } = null!;
         public bool? IsDeleted { get; set; }
 
-        public virtual ICollection<TbCreditCardUser> TbCreditCardUsers { get; set; }
+        public virtual ICollection<Creditcarduser> Creditcardusers { get; set; }
     }
 }

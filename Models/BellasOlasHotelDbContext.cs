@@ -7,45 +7,35 @@ namespace hotel_bellas_olas_api.Models
 {
     public partial class BellasOlasHotelDbContext : DbContext
     {
+        public BellasOlasHotelDbContext()
+        {
+        }
 
         public BellasOlasHotelDbContext(DbContextOptions<BellasOlasHotelDbContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<TbAdvertising> TbAdvertisings { get; set; } = null!;
-        public virtual DbSet<TbCategoryFeature> TbCategoryFeatures { get; set; } = null!;
-        public virtual DbSet<TbCategoryImage> TbCategoryImages { get; set; } = null!;
-        public virtual DbSet<TbCreditCard> TbCreditCards { get; set; } = null!;
-        public virtual DbSet<TbCreditCardUser> TbCreditCardUsers { get; set; } = null!;
-        public virtual DbSet<TbHotel> TbHotels { get; set; } = null!;
-        public virtual DbSet<TbImage> TbImages { get; set; } = null!;
-        public virtual DbSet<TbOffer> TbOffers { get; set; } = null!;
-        public virtual DbSet<TbReservation> TbReservations { get; set; } = null!;
-        public virtual DbSet<TbRole> TbRoles { get; set; } = null!;
-        public virtual DbSet<TbRoom> TbRooms { get; set; } = null!;
-        public virtual DbSet<TbRoomCategory> TbRoomCategories { get; set; } = null!;
-        public virtual DbSet<TbSeason> TbSeasons { get; set; } = null!;
-        public virtual DbSet<TbUser> TbUsers { get; set; } = null!;
-
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=163.178.107.10;Initial Catalog=BELLAS_OLAS_HOTEL_DB;Persist Security Info=False;USER ID=laboratorios;Password=KmZpo.2796; MultipleActiveResultSets=False;TrustServerCertificate=False;");
-            }
-        }
-        */
+        public virtual DbSet<Advertising> Advertisings { get; set; } = null!;
+        public virtual DbSet<Creditcard> Creditcards { get; set; } = null!;
+        public virtual DbSet<Creditcarduser> Creditcardusers { get; set; } = null!;
+        public virtual DbSet<Featurecatalog> Featurecatalogs { get; set; } = null!;
+        public virtual DbSet<Hotel> Hotels { get; set; } = null!;
+        public virtual DbSet<Image> Images { get; set; } = null!;
+        public virtual DbSet<Imagecatalog> Imagecatalogs { get; set; } = null!;
+        public virtual DbSet<Offer> Offers { get; set; } = null!;
+        public virtual DbSet<Reservation> Reservations { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<Room> Rooms { get; set; } = null!;
+        public virtual DbSet<Roomcategory> Roomcategories { get; set; } = null!;
+        public virtual DbSet<Season> Seasons { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TbAdvertising>(entity =>
+            modelBuilder.Entity<Advertising>(entity =>
             {
-                entity.HasKey(e => e.AdvertisingId)
-                    .HasName("PK__tb_ADVER__94D0E0A3BD1C1CC9");
-
-                entity.ToTable("tb_ADVERTISING", "ADMIN");
+                entity.ToTable("ADVERTISING", "ADMIN");
 
                 entity.Property(e => e.AdvertisingId).HasColumnName("ADVERTISING_ID");
 
@@ -57,7 +47,7 @@ namespace hotel_bellas_olas_api.Models
                 entity.Property(e => e.ImageId).HasColumnName("IMAGE_ID");
 
                 entity.Property(e => e.Info)
-                    .HasMaxLength(32)
+                    .HasMaxLength(300)
                     .IsUnicode(false)
                     .HasColumnName("INFO");
 
@@ -66,73 +56,15 @@ namespace hotel_bellas_olas_api.Models
                     .HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Image)
-                    .WithMany(p => p.TbAdvertisings)
+                    .WithMany(p => p.Advertisings)
                     .HasForeignKey(d => d.ImageId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_image_ad_id");
             });
 
-            modelBuilder.Entity<TbCategoryFeature>(entity =>
+            modelBuilder.Entity<Creditcard>(entity =>
             {
-                entity.HasKey(e => e.FeatureId)
-                    .HasName("PK__tb_CATEG__745D709D5699FF5A");
-
-                entity.ToTable("tb_CATEGORY_FEATURE", "ADMIN");
-
-                entity.Property(e => e.FeatureId).HasColumnName("FEATURE_ID");
-
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("IS_DELETED")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Type)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("TYPE");
-
-                entity.HasMany(d => d.Categories)
-                    .WithMany(p => p.Features)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "TbFeatureCategory",
-                        l => l.HasOne<TbRoomCategory>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_category_room"),
-                        r => r.HasOne<TbCategoryFeature>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_feature_feature"),
-                        j =>
-                        {
-                            j.HasKey("FeatureId", "CategoryId").HasName("pk_feature_category");
-
-                            j.ToTable("tb_FEATURE_CATEGORY", "ADMIN");
-
-                            j.IndexerProperty<int>("FeatureId").HasColumnName("FEATURE_ID");
-
-                            j.IndexerProperty<int>("CategoryId").HasColumnName("CATEGORY_ID");
-                        });
-            });
-
-            modelBuilder.Entity<TbCategoryImage>(entity =>
-            {
-                entity.HasKey(e => e.ImageCategoryId)
-                    .HasName("PK__tb_CATEG__579C857BEFCD62BA");
-
-                entity.ToTable("tb_CATEGORY_IMAGE", "ADMIN");
-
-                entity.Property(e => e.ImageCategoryId).HasColumnName("IMAGE_CATEGORY_ID");
-
-                entity.Property(e => e.CategoryName)
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .HasColumnName("CATEGORY_NAME");
-
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("IS_DELETED")
-                    .HasDefaultValueSql("((0))");
-            });
-
-            modelBuilder.Entity<TbCreditCard>(entity =>
-            {
-                entity.HasKey(e => e.CreditCardId)
-                    .HasName("PK__tb_CREDI__99F1C4F64C75FC3A");
-
-                entity.ToTable("tb_CREDIT_CARD", "ADMIN");
+                entity.ToTable("CREDITCARD", "ADMIN");
 
                 entity.Property(e => e.CreditCardId).HasColumnName("CREDIT_CARD_ID");
 
@@ -150,12 +82,12 @@ namespace hotel_bellas_olas_api.Models
                     .HasDefaultValueSql("((0))");
             });
 
-            modelBuilder.Entity<TbCreditCardUser>(entity =>
+            modelBuilder.Entity<Creditcarduser>(entity =>
             {
                 entity.HasKey(e => new { e.CreditCardId, e.UserId })
                     .HasName("pk_credit_card_user");
 
-                entity.ToTable("tb_CREDIT_CARD_USER", "ADMIN");
+                entity.ToTable("CREDITCARDUSER", "ADMIN");
 
                 entity.Property(e => e.CreditCardId)
                     .ValueGeneratedOnAdd()
@@ -168,26 +100,63 @@ namespace hotel_bellas_olas_api.Models
                     .HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.CreditCard)
-                    .WithMany(p => p.TbCreditCardUsers)
+                    .WithMany(p => p.Creditcardusers)
                     .HasForeignKey(d => d.CreditCardId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_credit_card_id");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.TbCreditCardUsers)
+                    .WithMany(p => p.Creditcardusers)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_USER_ID");
             });
 
-            modelBuilder.Entity<TbHotel>(entity =>
+            modelBuilder.Entity<Featurecatalog>(entity =>
             {
-                entity.HasKey(e => e.HotelId)
-                    .HasName("PK__tb_HOTEL__21CB99F2B129B95A");
+                entity.HasKey(e => e.FeatureId)
+                    .HasName("PK__FEATUREC__745D709D8DB4B716");
 
-                entity.ToTable("tb_HOTEL", "ADMIN");
+                entity.ToTable("FEATURECATALOG", "ADMIN");
+
+                entity.Property(e => e.FeatureId).HasColumnName("FEATURE_ID");
+
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("IS_DELETED")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("NAME");
+
+                entity.HasMany(d => d.Categories)
+                    .WithMany(p => p.Features)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "Hotelfeature",
+                        l => l.HasOne<Roomcategory>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_category_room"),
+                        r => r.HasOne<Featurecatalog>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_feature_feature"),
+                        j =>
+                        {
+                            j.HasKey("FeatureId", "CategoryId").HasName("pk_feature_category");
+
+                            j.ToTable("HOTELFEATURE", "ADMIN");
+
+                            j.IndexerProperty<int>("FeatureId").HasColumnName("FEATURE_ID");
+
+                            j.IndexerProperty<int>("CategoryId").HasColumnName("CATEGORY_ID");
+                        });
+            });
+
+            modelBuilder.Entity<Hotel>(entity =>
+            {
+                entity.ToTable("HOTEL", "ADMIN");
 
                 entity.Property(e => e.HotelId).HasColumnName("HOTEL_ID");
+
+                entity.Property(e => e.AboutUs)
+                    .IsUnicode(false)
+                    .HasColumnName("ABOUT_US");
 
                 entity.Property(e => e.Address)
                     .HasMaxLength(100)
@@ -218,14 +187,13 @@ namespace hotel_bellas_olas_api.Models
                     .HasColumnName("PHONE_NUMBER");
             });
 
-            modelBuilder.Entity<TbImage>(entity =>
+            modelBuilder.Entity<Image>(entity =>
             {
-                entity.HasKey(e => e.ImageId)
-                    .HasName("PK__tb_IMAGE__7EA98689C4718168");
-
-                entity.ToTable("tb_IMAGE", "ADMIN");
+                entity.ToTable("IMAGE", "ADMIN");
 
                 entity.Property(e => e.ImageId).HasColumnName("IMAGE_ID");
+
+                entity.Property(e => e.CategoryId).HasColumnName("CATEGORY_ID");
 
                 entity.Property(e => e.Content)
                     .HasMaxLength(100)
@@ -241,30 +209,35 @@ namespace hotel_bellas_olas_api.Models
                     .IsUnicode(false)
                     .HasColumnName("NAME");
 
-                entity.HasMany(d => d.Categories)
+                entity.HasOne(d => d.Category)
                     .WithMany(p => p.Images)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "TbImageCategory",
-                        l => l.HasOne<TbCategoryImage>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_category_id_category"),
-                        r => r.HasOne<TbImage>().WithMany().HasForeignKey("ImageId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_image_id_category"),
-                        j =>
-                        {
-                            j.HasKey("ImageId", "CategoryId").HasName("pk_image_category");
-
-                            j.ToTable("tb_IMAGE_CATEGORY", "ADMIN");
-
-                            j.IndexerProperty<int>("ImageId").HasColumnName("IMAGE_ID");
-
-                            j.IndexerProperty<int>("CategoryId").HasColumnName("CATEGORY_ID");
-                        });
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_image_catalog_id");
             });
 
-            modelBuilder.Entity<TbOffer>(entity =>
+            modelBuilder.Entity<Imagecatalog>(entity =>
             {
-                entity.HasKey(e => e.OfferId)
-                    .HasName("PK__tb_OFFER__96E0508B0A9ECF79");
+                entity.HasKey(e => e.ImageCategoryId)
+                    .HasName("PK__IMAGECAT__579C857B36AECF72");
 
-                entity.ToTable("tb_OFFER", "ADMIN");
+                entity.ToTable("IMAGECATALOG", "ADMIN");
+
+                entity.Property(e => e.ImageCategoryId).HasColumnName("IMAGE_CATEGORY_ID");
+
+                entity.Property(e => e.CatalogName)
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .HasColumnName("CATALOG_NAME");
+
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("IS_DELETED")
+                    .HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<Offer>(entity =>
+            {
+                entity.ToTable("OFFER", "ADMIN");
 
                 entity.Property(e => e.OfferId).HasColumnName("OFFER_ID");
 
@@ -290,12 +263,9 @@ namespace hotel_bellas_olas_api.Models
                     .HasColumnName("START_DATE");
             });
 
-            modelBuilder.Entity<TbReservation>(entity =>
+            modelBuilder.Entity<Reservation>(entity =>
             {
-                entity.HasKey(e => e.ReservationId)
-                    .HasName("PK__tb_RESER__43C938EE7A935272");
-
-                entity.ToTable("tb_RESERVATION", "ADMIN");
+                entity.ToTable("RESERVATION", "ADMIN");
 
                 entity.Property(e => e.ReservationId).HasColumnName("RESERVATION_ID");
 
@@ -321,24 +291,21 @@ namespace hotel_bellas_olas_api.Models
                 entity.Property(e => e.UserId).HasColumnName("USER_ID");
 
                 entity.HasOne(d => d.Room)
-                    .WithMany(p => p.TbReservations)
+                    .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.RoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_reservation_room_id");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.TbReservations)
+                    .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_reservation_user_id");
             });
 
-            modelBuilder.Entity<TbRole>(entity =>
+            modelBuilder.Entity<Role>(entity =>
             {
-                entity.HasKey(e => e.RoleId)
-                    .HasName("PK__tb_ROLE__5AC4D222E8790EA6");
-
-                entity.ToTable("tb_ROLE", "ADMIN");
+                entity.ToTable("ROLE", "ADMIN");
 
                 entity.Property(e => e.RoleId).HasColumnName("ROLE_ID");
 
@@ -352,12 +319,9 @@ namespace hotel_bellas_olas_api.Models
                     .HasColumnName("ROLE_NAME");
             });
 
-            modelBuilder.Entity<TbRoom>(entity =>
+            modelBuilder.Entity<Room>(entity =>
             {
-                entity.HasKey(e => e.RoomId)
-                    .HasName("PK__tb_ROOM__2F3DD4821AD1E1A6");
-
-                entity.ToTable("tb_ROOM", "ADMIN");
+                entity.ToTable("ROOM", "ADMIN");
 
                 entity.Property(e => e.RoomId).HasColumnName("ROOM_ID");
 
@@ -377,18 +341,15 @@ namespace hotel_bellas_olas_api.Models
                 entity.Property(e => e.Status).HasColumnName("STATUS");
 
                 entity.HasOne(d => d.RoomCategory)
-                    .WithMany(p => p.TbRooms)
+                    .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.RoomCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_room_category");
             });
 
-            modelBuilder.Entity<TbRoomCategory>(entity =>
+            modelBuilder.Entity<Roomcategory>(entity =>
             {
-                entity.HasKey(e => e.RoomCategoryId)
-                    .HasName("PK__tb_ROOM___CFE3C82737DDD8C3");
-
-                entity.ToTable("tb_ROOM_CATEGORY", "ADMIN");
+                entity.ToTable("ROOMCATEGORY", "ADMIN");
 
                 entity.Property(e => e.RoomCategoryId).HasColumnName("ROOM_CATEGORY_ID");
 
@@ -413,17 +374,14 @@ namespace hotel_bellas_olas_api.Models
                 entity.Property(e => e.OfferId).HasColumnName("OFFER_ID");
 
                 entity.HasOne(d => d.Offer)
-                    .WithMany(p => p.TbRoomCategories)
+                    .WithMany(p => p.Roomcategories)
                     .HasForeignKey(d => d.OfferId)
                     .HasConstraintName("fk_offer_room_category");
             });
 
-            modelBuilder.Entity<TbSeason>(entity =>
+            modelBuilder.Entity<Season>(entity =>
             {
-                entity.HasKey(e => e.SeasonId)
-                    .HasName("PK__tb_SEASO__CC8E723C1A62FC53");
-
-                entity.ToTable("tb_SEASON", "ADMIN");
+                entity.ToTable("SEASON", "ADMIN");
 
                 entity.Property(e => e.SeasonId).HasColumnName("SEASON_ID");
 
@@ -439,12 +397,9 @@ namespace hotel_bellas_olas_api.Models
                     .HasColumnName("TYPE");
             });
 
-            modelBuilder.Entity<TbUser>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.UserId)
-                    .HasName("PK__tb_USER__F3BEEBFFFFB16FC1");
-
-                entity.ToTable("tb_USER", "ADMIN");
+                entity.ToTable("_USER", "ADMIN");
 
                 entity.Property(e => e.UserId).HasColumnName("USER_ID");
 
@@ -470,7 +425,7 @@ namespace hotel_bellas_olas_api.Models
                 entity.Property(e => e.RoleId).HasColumnName("ROLE_ID");
 
                 entity.HasOne(d => d.Role)
-                    .WithMany(p => p.TbUsers)
+                    .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_user_role");

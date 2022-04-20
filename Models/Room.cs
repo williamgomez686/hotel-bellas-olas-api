@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace hotel_bellas_olas_api.Models
 {
-    public partial class TbRoom
+    public partial class Room
     {
-        public TbRoom()
+        public Room()
         {
-            TbReservations = new HashSet<TbReservation>();
+            Reservations = new HashSet<Reservation>();
         }
 
         public int RoomId { get; set; }
@@ -17,7 +17,7 @@ namespace hotel_bellas_olas_api.Models
         public bool Status { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual TbRoomCategory RoomCategory { get; set; } = null!;
-        public virtual ICollection<TbReservation> TbReservations { get; set; }
+        public virtual Roomcategory RoomCategory { get; set; } = null!;
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

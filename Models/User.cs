@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace hotel_bellas_olas_api.Models
 {
-    public partial class TbUser
+    public partial class User
     {
-        public TbUser()
+        public User()
         {
-            TbCreditCardUsers = new HashSet<TbCreditCardUser>();
-            TbReservations = new HashSet<TbReservation>();
+            Creditcardusers = new HashSet<Creditcarduser>();
+            Reservations = new HashSet<Reservation>();
         }
 
         public int UserId { get; set; }
@@ -18,8 +18,8 @@ namespace hotel_bellas_olas_api.Models
         public string Email { get; set; } = null!;
         public bool? IsDeleted { get; set; }
 
-        public virtual TbRole Role { get; set; } = null!;
-        public virtual ICollection<TbCreditCardUser> TbCreditCardUsers { get; set; }
-        public virtual ICollection<TbReservation> TbReservations { get; set; }
+        public virtual Role Role { get; set; } = null!;
+        public virtual ICollection<Creditcarduser> Creditcardusers { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

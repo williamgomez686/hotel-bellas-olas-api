@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace hotel_bellas_olas_api.Models
 {
-    public partial class TbAdvertising
+    public partial class Advertising
     {
         public int AdvertisingId { get; set; }
         public string? AdLink { get; set; }
@@ -11,6 +11,6 @@ namespace hotel_bellas_olas_api.Models
         public string? Info { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual TbImage Image { get; set; } = null!;
+        public virtual Image Image { get; set; } = null!;
     }
 }

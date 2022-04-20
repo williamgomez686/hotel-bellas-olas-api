@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace hotel_bellas_olas_api.Models
 {
-    public partial class TbReservation
+    public partial class Reservation
     {
         public int ReservationId { get; set; }
         public string? ReservationNumber { get; set; }
@@ -13,7 +13,7 @@ namespace hotel_bellas_olas_api.Models
         public int UserId { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual TbRoom Room { get; set; } = null!;
-        public virtual TbUser User { get; set; } = null!;
+        public virtual Room Room { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
     }
 }

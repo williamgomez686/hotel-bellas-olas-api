@@ -1,7 +1,18 @@
 using hotel_bellas_olas_api.Models;
 using Microsoft.EntityFrameworkCore;
 
+var myAllowSpecificOrigins = "_policy1";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                      });
+});
 
 // Add services to the container.
 builder.Services.AddDbContext<BellasOlasHotelDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DB_Connection")));
@@ -20,6 +31,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(myAllowSpecificOrigins);
 
 app.UseAuthorization();
 

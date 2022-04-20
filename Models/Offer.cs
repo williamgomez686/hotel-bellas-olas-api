@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace hotel_bellas_olas_api.Models
 {
-    public partial class TbOffer
+    public partial class Offer
     {
-        public TbOffer()
+        public Offer()
         {
-            TbRoomCategories = new HashSet<TbRoomCategory>();
+            Roomcategories = new HashSet<Roomcategory>();
         }
 
         public int OfferId { get; set; }
@@ -18,6 +18,6 @@ namespace hotel_bellas_olas_api.Models
         public int? OfferPercent { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual ICollection<TbRoomCategory> TbRoomCategories { get; set; }
+        public virtual ICollection<Roomcategory> Roomcategories { get; set; }
     }
 }
