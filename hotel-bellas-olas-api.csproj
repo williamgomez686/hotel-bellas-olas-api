@@ -23,7 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    
+    <Folder Include="Assets\aboutUs\" />
+    <Folder Include="Assets\advertising\" />
+    <Folder Include="Assets\facilities\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,8 @@
 using hotel_bellas_olas_api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+
+var myAllowSpecificOrigins = "_policy1";
 
 var myAllowSpecificOrigins = "_policy1";
 
@@ -33,6 +36,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(myAllowSpecificOrigins);
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "Assets")),
+    RequestPath = "/Assets"
+});
 
 app.UseAuthorization();
 
