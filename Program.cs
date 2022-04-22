@@ -4,8 +4,6 @@ using Microsoft.Extensions.FileProviders;
 
 var myAllowSpecificOrigins = "_policy1";
 
-var myAllowSpecificOrigins = "_policy1";
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
