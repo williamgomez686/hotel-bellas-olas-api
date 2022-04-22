@@ -33,11 +33,7 @@ namespace hotel_bellas_olas_api.Controllers
                var homeImage = this.db.Images.Where((img) => img.CategoryId == catalogImageId).FirstOrDefault();
                if (homeImage != null)
                 {
-                    var fileName = System.IO.Path.Combine(_env.ContentRootPath,
-                    "Assets/home", homeImage.Name);
-                    byte[] imageArray = System.IO.File.ReadAllBytes(fileName);
-                    string base64Image = Convert.ToBase64String(imageArray);
-                    return Ok(new { homeText = db.Hotels.First().Description, img = homeImage.Name });
+                    return Ok(new { homeText = db.Hotels.First().Description, img = String.Format("{0}://{1}{2}/Assets/home/{3}", Request.Scheme, Request.Host, Request.PathBase, homeImage.Name) });
                 }
             }        
             return Ok(new { homeText = db.Hotels.FirstOrDefault()==null?"Información de inicio del hotel (por defecto)": db.Hotels.FirstOrDefault().Description, alt = "Hotel Bellas Olas" });
