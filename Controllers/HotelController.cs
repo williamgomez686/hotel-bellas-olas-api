@@ -171,11 +171,22 @@ namespace hotel_bellas_olas_api.Controllers
             return Ok("Sección modificada con éxito");
         }
         [HttpGet]
-        [Route("/API/Hotel/GetHotelFacilities")]
-        public async Task<IActionResult> getHotelFacilities()
+        [Route("/API/Hotel/GetHotelFeatures")]
+        public async Task<IActionResult> getHotelFeatures()
         {
-
-            return Ok();
+            List<object> features = new();
+            for (int i = 0; i < this.db.Hotelfeatures.Count(); i++)
+            {
+                var feature = this.db.Hotelfeatures.ToList().ElementAt(i);
+                var img = "";
+                var featureImg = this.db.Images.Find(feature.ImageId);
+                if (featureImg!=null)
+                {
+                    img = String.Format("{0}://{1}{2}/Assets/features/{3}", Request.Scheme, Request.Host, Request.PathBase, featureImg.Name);
+                }
+                features.Add(new{ id=feature.FeatureId, feature= feature.Description, img=img });
+            }
+            return Ok(features); 
         }
     }
 }
