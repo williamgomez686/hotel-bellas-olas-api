@@ -170,7 +170,9 @@ namespace hotel_bellas_olas_api.Models
                     .IsUnicode(false)
                     .HasColumnName("DESCRIPTION");
 
-                entity.Property(e => e.FeatureId).HasColumnName("FEATURE_ID");
+                entity.Property(e => e.FeatureId)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("FEATURE_ID");
 
                 entity.Property(e => e.ImageId).HasColumnName("IMAGE_ID");
 
@@ -343,7 +345,10 @@ namespace hotel_bellas_olas_api.Models
 
                 entity.Property(e => e.RoomCategoryId).HasColumnName("ROOM_CATEGORY_ID");
 
-                entity.Property(e => e.Cost).HasColumnName("COST");
+                entity.Property(e => e.Cost)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("COST");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(32)
