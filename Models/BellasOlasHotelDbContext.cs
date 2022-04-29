@@ -19,8 +19,8 @@ namespace hotel_bellas_olas_api.Models
         public virtual DbSet<Advertising> Advertisings { get; set; } = null!;
         public virtual DbSet<Creditcard> Creditcards { get; set; } = null!;
         public virtual DbSet<Creditcarduser> Creditcardusers { get; set; } = null!;
-        public virtual DbSet<Featurecatalog> Featurecatalogs { get; set; } = null!;
         public virtual DbSet<Hotel> Hotels { get; set; } = null!;
+        public virtual DbSet<Hotelfeature> Hotelfeatures { get; set; } = null!;
         public virtual DbSet<Image> Images { get; set; } = null!;
         public virtual DbSet<Imagecatalog> Imagecatalogs { get; set; } = null!;
         public virtual DbSet<Offer> Offers { get; set; } = null!;
@@ -30,6 +30,15 @@ namespace hotel_bellas_olas_api.Models
         public virtual DbSet<Roomcategory> Roomcategories { get; set; } = null!;
         public virtual DbSet<Season> Seasons { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=163.178.107.10;Initial Catalog=BELLAS_OLAS_HOTEL_DB;Persist Security Info=False;USER ID=laboratorios;Password=KmZpo.2796; MultipleActiveResultSets=False;TrustServerCertificate=False;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -112,42 +121,6 @@ namespace hotel_bellas_olas_api.Models
                     .HasConstraintName("fk_USER_ID");
             });
 
-            modelBuilder.Entity<Featurecatalog>(entity =>
-            {
-                entity.HasKey(e => e.FeatureId)
-                    .HasName("PK__FEATUREC__745D709D8DB4B716");
-
-                entity.ToTable("FEATURECATALOG", "ADMIN");
-
-                entity.Property(e => e.FeatureId).HasColumnName("FEATURE_ID");
-
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("IS_DELETED")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("NAME");
-
-                entity.HasMany(d => d.Categories)
-                    .WithMany(p => p.Features)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "Hotelfeature",
-                        l => l.HasOne<Roomcategory>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_category_room"),
-                        r => r.HasOne<Featurecatalog>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_feature_feature"),
-                        j =>
-                        {
-                            j.HasKey("FeatureId", "CategoryId").HasName("pk_feature_category");
-
-                            j.ToTable("HOTELFEATURE", "ADMIN");
-
-                            j.IndexerProperty<int>("FeatureId").HasColumnName("FEATURE_ID");
-
-                            j.IndexerProperty<int>("CategoryId").HasColumnName("CATEGORY_ID");
-                        });
-            });
-
             modelBuilder.Entity<Hotel>(entity =>
             {
                 entity.ToTable("HOTEL", "ADMIN");
@@ -185,6 +158,23 @@ namespace hotel_bellas_olas_api.Models
                     .HasMaxLength(32)
                     .IsUnicode(false)
                     .HasColumnName("PHONE_NUMBER");
+            });
+
+            modelBuilder.Entity<Hotelfeature>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("HOTELFEATURE", "ADMIN");
+
+                entity.Property(e => e.Description)
+                    .IsUnicode(false)
+                    .HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.FeatureId).HasColumnName("FEATURE_ID");
+
+                entity.Property(e => e.ImageId).HasColumnName("IMAGE_ID");
+
+                entity.Property(e => e.IsDeleted).HasColumnName("IS_DELETED");
             });
 
             modelBuilder.Entity<Image>(entity =>

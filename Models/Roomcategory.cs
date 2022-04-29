@@ -8,7 +8,6 @@ namespace hotel_bellas_olas_api.Models
         public Roomcategory()
         {
             Rooms = new HashSet<Room>();
-            Features = new HashSet<Featurecatalog>();
         }
 
         public int RoomCategoryId { get; set; }
@@ -21,7 +20,5 @@ namespace hotel_bellas_olas_api.Models
 
         public virtual Offer? Offer { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
-
-        public virtual ICollection<Featurecatalog> Features { get; set; }
     }
 }
