@@ -1,8 +1,5 @@
 ﻿using hotel_bellas_olas_api.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Drawing;
-using Newtonsoft.Json;
 using hotel_bellas_olas_api.Utils;
 using ImageDb = hotel_bellas_olas_api.Models.Image;
 

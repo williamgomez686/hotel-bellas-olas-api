@@ -1,12 +1,8 @@
 ﻿
 using hotel_bellas_olas_api.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
-using Newtonsoft.Json;
 using hotel_bellas_olas_api.Utils;
-using Image = System.Drawing.Image;
 
 namespace hotel_bellas_olas_api.Controllers
 {
@@ -192,6 +188,22 @@ namespace hotel_bellas_olas_api.Controllers
                 features.Add(new { id = feature.FeatureId, feature = feature.Description, img = img });
             }
             return Ok(features);
+        }
+
+        [HttpGet]
+        [Route("/API/Hotel/GetHotelLocation")]
+        public async Task<IActionResult> GetHotelLocation()
+        {
+            var hotel = await db.Hotels.FirstOrDefaultAsync();
+
+            if (hotel != null)
+            {
+                return Ok(new
+                {
+                    hotel.Address,
+                });
+            }
+            return NotFound();
         }
     }
 }
