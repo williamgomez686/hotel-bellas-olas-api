@@ -33,7 +33,11 @@ namespace hotel_bellas_olas_api.Controllers
                 var homeImage = this.db.Images.Where((img) => img.CategoryId == catalogImageId).FirstOrDefault();
                 if (homeImage != null)
                 {
-                    return Ok(new { homeText = db.Hotels.First().Description, img = String.Format("{0}://{1}{2}/Assets/home/{3}", Request.Scheme, Request.Host, Request.PathBase, homeImage.Name) });
+                    return Ok(new
+                    {
+                        homeText = db.Hotels.First().Description,
+                        img = String.Format("{0}://{1}{2}/Assets/home/{3}", Request.Scheme, Request.Host, Request.PathBase, homeImage.Name)
+                    });
                 }
             }
             return Ok(new { homeText = db.Hotels.FirstOrDefault() == null ? "Información de inicio del hotel (por defecto)" : db.Hotels.FirstOrDefault().Description, alt = "Hotel Bellas Olas" });
@@ -170,6 +174,7 @@ namespace hotel_bellas_olas_api.Controllers
             await this.db.SaveChangesAsync();
             return Ok("Sección modificada con éxito");
         }
+
         [HttpGet]
         [Route("/API/Hotel/GetHotelFeatures")]
         public async Task<IActionResult> getHotelFeatures()
@@ -180,13 +185,13 @@ namespace hotel_bellas_olas_api.Controllers
                 var feature = this.db.Hotelfeatures.ToList().ElementAt(i);
                 var img = "";
                 var featureImg = this.db.Images.Find(feature.ImageId);
-                if (featureImg!=null)
+                if (featureImg != null)
                 {
                     img = String.Format("{0}://{1}{2}/Assets/features/{3}", Request.Scheme, Request.Host, Request.PathBase, featureImg.Name);
                 }
-                features.Add(new{ id=feature.FeatureId, feature= feature.Description, img=img });
+                features.Add(new { id = feature.FeatureId, feature = feature.Description, img = img });
             }
-            return Ok(features); 
+            return Ok(features);
         }
     }
 }

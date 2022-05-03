@@ -38,5 +38,21 @@ namespace hotel_bellas_olas_api.Controllers
             }
             return Ok(roomCategories);
         }
+
+        [HttpGet]
+        [Route("/API/Hotel/GetHotelLocation")]
+        public async Task<IActionResult> GetHotelLocation()
+        {
+            var hotel = await db.Hotels.FirstOrDefaultAsync();
+
+            if (hotel != null)
+            {
+                return Ok(new
+                {
+                    hotel.Address,
+                });
+            }
+            return NotFound();
+        }
     }
 }
