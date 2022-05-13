@@ -351,7 +351,6 @@ namespace hotel_bellas_olas_api.Models
                     .HasColumnName("COST");
 
                 entity.Property(e => e.Description)
-                    .HasMaxLength(32)
                     .IsUnicode(false)
                     .HasColumnName("DESCRIPTION");
 
@@ -417,7 +416,17 @@ namespace hotel_bellas_olas_api.Models
                     .IsUnicode(false)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.Password)
+                    .HasMaxLength(300)
+                    .IsUnicode(false)
+                    .HasColumnName("PASSWORD");
+
                 entity.Property(e => e.RoleId).HasColumnName("ROLE_ID");
+
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("USER_NAME");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)

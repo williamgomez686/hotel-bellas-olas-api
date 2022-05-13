@@ -16,6 +16,8 @@ namespace hotel_bellas_olas_api.Models
         public string LastName { get; set; } = null!;
         public int RoleId { get; set; }
         public string Email { get; set; } = null!;
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
         public bool? IsDeleted { get; set; }
 
         public virtual Role Role { get; set; } = null!;
