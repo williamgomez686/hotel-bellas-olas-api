@@ -1,4 +1,5 @@
 using hotel_bellas_olas_api.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -18,6 +19,14 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddDbContext<BellasOlasHotelDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DB_Connection")));
 builder.Services.AddControllers();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                //options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                //options.AccessDeniedPath = "/Error";
+                options.SlidingExpiration = true;
+            });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,7 +51,15 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Assets"
 });
 
+var cookiePolicyOptions = new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+};
+
+app.UseCookiePolicy(cookiePolicyOptions);
+
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 
