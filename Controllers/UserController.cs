@@ -1,4 +1,5 @@
 ﻿using hotel_bellas_olas_api.Models;
+using hotel_bellas_olas_api.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -22,16 +23,16 @@ namespace hotel_bellas_olas_api.Controllers
 
         [HttpPost]
         [Route("/API/User/LogInUser")]
-        public async Task<IActionResult> Post(string userName, string password)
+        public async Task<IActionResult> Post(UserInfo userInfo)
         {
-            var user = this.db.Users.ToList().Where(u => u.UserName.Equals(userName) && u.Password.Equals(password)).FirstOrDefault();
+            var user = this.db.Users.ToList().Where(u => u.UserName.Equals(userInfo.userName) && u.Password.Equals(userInfo.password)).FirstOrDefault();
             if (user != null)
             {
                 var claims = new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString()),
                     new Claim(ClaimTypes.Name,user.UserName),
-                    new Claim(ClaimTypes.Role, user.Role.RoleId.ToString())
+                    new Claim(ClaimTypes.Role, "Admin")
 ,                };
                 var identity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(
@@ -41,7 +42,7 @@ namespace hotel_bellas_olas_api.Controllers
             }
             if(user != null)
             {
-                return Ok(new{user= user.UserName });
+                return Ok(new{userName= user.UserName,UserId=user.UserId });
             }
             else
             {
