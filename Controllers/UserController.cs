@@ -51,7 +51,7 @@ namespace hotel_bellas_olas_api.Controllers
         }
         [HttpPost]
         [Route("/API/User/LogOutUser")]
-        public async Task<IActionResult> get()
+        public async Task<IActionResult> post()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok("Sesión cerrada");

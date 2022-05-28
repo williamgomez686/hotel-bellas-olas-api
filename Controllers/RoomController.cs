@@ -38,5 +38,48 @@ namespace hotel_bellas_olas_api.Controllers
             }
             return Ok(roomCategories);
         }
+        [HttpGet]
+        [Route("/API/Room/GetCurrentRoomStatus")]
+        public async Task<IActionResult> GetCurrentRoomStatus()
+        {
+            //habitaciones con reserva pero que están libres por la fecha
+
+            var getRoomsFreeReservation =
+                (from rooms in db.Rooms
+                join reservations in db.Reservations on rooms.RoomId equals reservations.RoomId
+                join categories in db.Roomcategories on rooms.RoomCategoryId equals categories.RoomCategoryId
+                where reservations.DepartureDate.Day <= DateTime.Now.Day
+                && reservations.DepartureDate.Month <= DateTime.Now.Month
+                && reservations.DepartureDate.Year <= DateTime.Now.Year
+                select new
+                {
+                    roomName = rooms.RoomName,
+                    number = rooms.RoomNumber,
+                    roomCategory = categories.Name,
+                    lastDate = reservations.DepartureDate.ToShortDateString()
+                }).ToList();
+
+            //habitaciones que no tienen reserva
+            var getRoomsNoReservation =
+                (from rooms in db.Rooms
+                join categories in db.Roomcategories on rooms.RoomCategoryId equals categories.RoomCategoryId
+                where !(from room in db.Rooms
+                        join reservations in db.Reservations on room.RoomId equals reservations.RoomId
+                        select room.RoomId).Contains(rooms.RoomId)
+                select new
+                {
+                    roomName = rooms.RoomName,
+                    number = rooms.RoomNumber,
+                    roomCategory = categories.Name,
+                    lastDate = "sin información"
+                }).ToList();
+
+            //se unen los dos resultados
+
+            getRoomsFreeReservation.ForEach(rf => getRoomsNoReservation.Add(rf));
+
+            return Ok(getRoomsNoReservation);
+        }
+
     }
 }
